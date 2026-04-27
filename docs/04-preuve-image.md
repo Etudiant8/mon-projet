@@ -3,12 +3,11 @@
 ## Image publiée
 
 - **Nom de l'image** : `ghcr.io/DEimazoute/mon-projet`
-- **Tag principal** : `sha-XXXXXXX` *(à remplacer par le vrai SHA après le premier push)*
+- **Tag principal** : `sha-6fe66b3`
 - **Tag secondaire** : `latest`
-- **Digest** : `sha256:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
-  *(à remplacer par le vrai digest affiché dans le résumé du workflow 02-publish-ghcr.yml)*
+- **Tag promotion** : `production-simulee`
+- **Digest** : `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
 - **Lien GHCR** : https://github.com/DEimazoute/mon-projet/pkgs/container/mon-projet
-  *(à remplacer par le lien réel après publication)*
 
 ## Comment retrouver le digest
 
