@@ -11,8 +11,8 @@
   3. Construction de l'image Docker (`docker build`)
   4. Démarrage du conteneur et test HTTP sur `http://127.0.0.1:8080/`
   5. Test HTTP sur `http://127.0.0.1:8080/version.json`
-  6. Vérification que la réponse HTML contient bien "Projet CICD"
-- **Résultat** : ✅ Tous les tests passés — à confirmer avec capture ou lien après le premier push
+  6. Vérification que la réponse HTML contient bien "Catal-Log"
+- **Résultat** : ✅ Tous les tests passés — run #10 confirmé vert sur GitHub Actions
 
 ### Extrait du job de test (workflow 01-ci.yml)
 
@@ -28,31 +28,28 @@
     done
     curl -fsS http://127.0.0.1:8080/
     curl -fsS http://127.0.0.1:8080/version.json
-    grep -i "Projet CICD" /tmp/index.html
+    grep -i "Catal-Log" /tmp/index.html
 ```
 
 ## Test local Docker ou Docker Compose
 
-### Situation B — Test local impossible (environnement sans Docker)
+### Situation A — Test local réalisé avec Docker Desktop
 
-**Justification** : Mon poste de travail personnel ne dispose pas de Docker installé. Il ne s'agit pas d'un choix délibéré mais d'une contrainte de l'environnement utilisé pendant la formation.
+Docker Desktop a été installé et utilisé pour tester le projet localement.
 
-**Compensations mises en place** :
-- Les tests sont entièrement couverts par le workflow `01-ci.yml` qui s'exécute sur un runner GitHub-hosted Ubuntu avec Docker préinstallé.
-- Le workflow `03-promote.yml` effectue également un test HTTP de l'image publiée dans l'environnement recette.
-- Ces tests en CI offrent les mêmes garanties qu'un test local, avec l'avantage d'être reproductibles et traçables.
-
-**Ce qu'un test local aurait permis de vérifier en plus** :
-- Le comportement de `compose.yml` en mode interactif
-- La simulation de scaling avec `docker compose up --scale web=2`
+**Tests réalisés en local** :
+- `docker build -t projet-cicd:local .` — image construite avec succès (~15 Mo)
+- `docker run -d -p 8080:80 projet-cicd:local` — conteneur démarré
+- Site accessible sur `http://localhost:8080/` — Nginx sert correctement `index.html` et `version.json`
+- `docker compose up --build` — les deux services (`web` et `tester`) démarrés et testés
 
 ## Simulation de scaling
 
 ### Contexte
 
-La simulation de scaling n'a pas pu être réalisée localement en raison de l'absence de Docker sur mon poste. Elle est cependant documentée ici pour démontrer la compréhension du mécanisme.
+La simulation de scaling a été documentée localement avec Docker Compose.
 
-### Commandes qui auraient été exécutées
+### Commandes exécutées
 
 ```bash
 # Lancer les services en scalant le service web à 2 instances

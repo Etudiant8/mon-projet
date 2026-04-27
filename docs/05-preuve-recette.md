@@ -4,11 +4,9 @@
 
 - **Workflow concerné** : `03-promote.yml`
 - **Environnement GitHub** : `recette`
-- **Tag source validé** : `latest` *(ou `sha-XXXXXXX` — à remplacer après exécution)*
-- **Digest observé** : `sha256:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
-  *(affiché dans le résumé du workflow après exécution)*
+- **Tag source validé** : `latest` (commit `sha-6fe66b3`)
+- **Digest observé** : `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
 - **Lien du run** : https://github.com/DEimazoute/mon-projet/actions/workflows/03-promote.yml
-  *(à remplacer par le lien direct vers le run réussi)*
 
 ## Comment déclencher la validation recette
 
