@@ -40,7 +40,7 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8080/
           curl -fsS http://127.0.0.1:8080/version.json
-          grep -i "Projet CICD" /tmp/index.html
+          grep -i "Catal-Log" /tmp/index.html
 
       - name: Résumé CI
         run: |
