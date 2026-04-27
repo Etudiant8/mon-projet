@@ -1,0 +1,49 @@
+# compose.yml — Orchestration légère pour le Projet CI/CD EC06
+# Auteur : Anonyme
+#
+# Ce fichier décrit deux services :
+#   - web    : le serveur Nginx servant le site statique Catal-Log
+#   - tester : un conteneur curl qui valide le bon fonctionnement de "web"
+#
+# Il sert à documenter et simuler une coordination de conteneurs (compétence C13).
+# Il ne remplace pas une orchestration de production (pas de load balancer, pas de HA).
+#
+# Commandes utiles :
+#   docker compose up --build          → construire et démarrer les deux services
+#   docker compose ps                  → vérifier l'état
+#   docker compose logs web            → voir les logs Nginx
+#   docker compose down                → arrêter et supprimer les conteneurs
+
+services:
+  web:
+    build: .
+    image: projet-cicd-nginx:local
+    expose:
+      - "80"
+    networks:
+      - cicd_net
+    restart: unless-stopped
+
+  tester:
+    # Second service : valide que le service web répond correctement
+    # Démontre la coordination de plusieurs conteneurs dans Compose
+    image: curlimages/curl:8.12.1
+    depends_on:
+      - web
+    command:
+      - "sh"
+      - "-c"
+      - |
+        echo "=== Attente démarrage de Nginx ==="
+        sleep 3
+        echo "=== Test page principale ==="
+        curl -fsS http://web/ && echo "OK"
+        echo "=== Test version.json ==="
+        curl -fsS http://web/version.json && echo "OK"
+        echo "=== Tous les tests passés ==="
+    networks:
+      - cicd_net
+
+networks:
+  cicd_net:
+    driver: bridge

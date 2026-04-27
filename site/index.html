@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catal-Log — Projet CI/CD</title>
+  <style>
+    :root {
+      --blue-dark: #1f4e79;
+      --blue-mid: #2980b9;
+      --blue-light: #e8f4fd;
+      --green: #27ae60;
+      --text: #1f2d3d;
+      --muted: #5d6d7e;
+      --bg: #f0f4f8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--blue-dark);
+      color: white;
+      padding: 0;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo {
+      width: 54px;
+      height: 54px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .header-text h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .header-text p {
+      font-size: 0.88rem;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
+
+    .status-bar {
+      background: var(--blue-mid);
+      padding: 10px 0;
+    }
+    .status-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: white;
+      font-weight: 500;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2ecc71;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    main {
+      max-width: 960px;
+      margin: 32px auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) { main { grid-template-columns: 1fr; } }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    }
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--blue-light);
+    }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .pipe-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      position: relative;
+    }
+    .pipe-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 38px;
+      width: 2px;
+      height: calc(100% - 26px);
+      background: var(--blue-light);
+    }
+    .pipe-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue-light);
+      border: 2px solid var(--blue-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .pipe-icon.done { background: #eafaf1; border-color: var(--green); }
+    .pipe-content strong { font-size: 0.85rem; color: var(--text); display: block; }
+    .pipe-content span { font-size: 0.75rem; color: var(--muted); }
+
+    .info-grid { display: flex; flex-direction: column; gap: 12px; }
+    .info-row { display: flex; flex-direction: column; gap: 2px; }
+    .info-row label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; }
+    .info-row value { font-size: 0.85rem; color: var(--text); font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; background: var(--blue-light); padding: 4px 8px; border-radius: 5px; display: block; word-break: break-all; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .badge.blue { background: var(--blue-light); color: var(--blue-dark); }
+    .badge.green { background: #eafaf1; color: #1e7e34; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">📦</div>
+      <div class="header-text">
+        <h1>Catal-Log — Site Statique</h1>
+        <p>Servi par Nginx · Conteneurisé · Déployé via GitHub Actions</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="status-bar">
+    <div class="status-inner">
+      <div class="status-pill"><div class="status-dot"></div> Nginx opérationnel</div>
+      <div class="status-pill"><div class="status-dot"></div> Image publiée sur GHCR</div>
+      <div class="status-pill"><div class="status-dot"></div> Pipeline CI/CD actif</div>
+    </div>
+  </div>
+
+  <main>
+    <div class="card">
+      <h2>🔄 Chaîne CI/CD</h2>
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-icon done">📝</div>
+          <div class="pipe-content">
+            <strong>Commit &amp; Push vers GitHub</strong>
+            <span>Versionnement du code source et déclenchement automatique</span>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">🔨</div>
+          <div class="pipe-content">
+            <strong>01-ci.yml — Build &amp; Test HTTP</strong>
+            <span>Construction de l'image Docker + test HTTP automatisé sur port 8080</span>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">📦</div>
+          <div class="pipe-content">
+            <strong>02-publish-ghcr.yml — Publication GHCR</strong>
+            <span>Image taguée (sha- + latest) et publiée dans GitHub Container Registry</span>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">🧪</div>
+          <div class="pipe-content">
+            <strong>03-promote.yml — Validation recette</strong>
+            <span>Test de l'image existante dans l'environnement GitHub "recette"</span>
+          </div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-icon done">🚀</div>
+          <div class="pipe-content">
+            <strong>Promotion production-simulee</strong>
+            <span>Promotion manuelle (workflow_dispatch) sans rebuild — même artefact</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom: 24px;">
+        <h2>👤 Projet</h2>
+        <div class="info-grid">
+          <div class="info-row">
+            <label>Auteur</label>
+            <value>Anonyme</value>
+          </div>
+          <div class="info-row">
+            <label>Évaluation</label>
+            <value>EC06 — ASRC</value>
+          </div>
+          <div class="info-row">
+            <label>Version</label>
+            <value>1.0.0</value>
+          </div>
+          <div class="info-row">
+            <label>Date</label>
+            <value>2026-04-27</value>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🛠️ Stack technique</h2>
+        <div class="badge-row">
+          <span class="badge blue">Docker</span>
+          <span class="badge blue">Nginx 1.27</span>
+          <span class="badge blue">GitHub Actions</span>
+          <span class="badge green">GHCR</span>
+          <span class="badge green">Docker Compose</span>
+          <span class="badge blue">Alpine Linux</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Projet CI/CD — EC06 ASRC · Anonyme · 2026
+  </footer>
+
+</body>
+</html>
