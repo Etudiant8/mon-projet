@@ -4,9 +4,9 @@
 
 - **Workflow concerné** : `03-promote.yml`
 - **Environnement GitHub** : `recette`
-- **Tag source validé** : `latest` (commit `sha-35d0a9a`)
-- **Digest observé** : `sha256:054d4ca9f730eb115a9f5b21d1a83ce1a03fd83f12b985e8514e80b1b17f6c27`
-- **Lien du run** : https://github.com/Etudiant8/mon-projet/actions/runs/28567113428
+- **Tag source validé** : `latest` (commit `sha-641ca4e`)
+- **Digest observé** : `sha256:6b260baa99b1e621b3da7afa2f19013208d001363c770def11cf609ddb3cc998`
+- **Lien du run** : https://github.com/Etudiant8/mon-projet/actions/runs/28567349876
 
 ## Comment déclencher la validation recette
 

@@ -3,12 +3,14 @@
 ## Image publiée
 
 - **Nom de l'image** : `ghcr.io/Etudiant8/mon-projet`
-- **Tag principal** : `sha-35d0a9a`
+- **Tag principal** : `sha-641ca4e`
 - **Tag secondaire** : `latest`
 - **Tag promotion** : `production-simulee`
-- **Digest** : `sha256:054d4ca9f730eb115a9f5b21d1a83ce1a03fd83f12b985e8514e80b1b17f6c27`
+- **Digest** : `sha256:6b260baa99b1e621b3da7afa2f19013208d001363c770def11cf609ddb3cc998`
 - **Lien GHCR** : https://github.com/Etudiant8/mon-projet/pkgs/container/mon-projet
-- **Lien run de publication** : https://github.com/Etudiant8/mon-projet/actions/runs/28566975994
+- **Lien run de publication** : https://github.com/Etudiant8/mon-projet/actions/runs/28567259274
+
+*(Note : chaque push republie une image via `02-publish-ghcr.yml`, y compris pour une modification de documentation seule. Le digest change à chaque build car GitHub attache des métadonnées de provenance horodatées, même si le contenu du site est identique. Le tag et le digest ci-dessus correspondent au dernier run réussi au moment de la rédaction.)*
 
 ## Comment retrouver le digest
 
