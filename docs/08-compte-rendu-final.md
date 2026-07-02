@@ -1,6 +1,6 @@
 # 08 - Compte rendu final
 
-**Auteur** : Anonyme  
+**Auteur** : Etudiant_8  
 **Évaluation** : EC06 — ASRC  
 **Date** : 27 avril 2026
 
@@ -53,12 +53,12 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
 
 - Taille approximative : ~15 Mo (site statique inclus)
 - Tags publiés : `sha-<commit>`, `latest`, `production-simulee`
-- Registre : `ghcr.io/DEimazoute/mon-projet`
+- Registre : `ghcr.io/Etudiant8/mon-projet`
 
 ### Preuves
 
-- Lien GHCR : https://github.com/DEimazoute/mon-projet/pkgs/container/mon-projet
-- Lien run CI : https://github.com/DEimazoute/mon-projet/actions/workflows/01-ci.yml
+- Lien GHCR : https://github.com/Etudiant8/mon-projet/pkgs/container/mon-projet
+- Lien run CI : https://github.com/Etudiant8/mon-projet/actions/workflows/01-ci.yml
 
 ---
 
@@ -75,7 +75,7 @@ Ce second service démontre la **coordination de plusieurs conteneurs** : il att
 
 ### Simulation de scaling
 
-La simulation de scaling (`docker compose up --scale web=2`) n'a pas pu être réalisée localement faute de Docker disponible sur mon poste. Elle est documentée dans `docs/03-fiche-tests.md` avec les commandes et le résultat attendu.
+La simulation de scaling (`docker compose up --scale web=2`) est documentée dans `docs/03-fiche-tests.md` avec les commandes exécutées et le résultat observé localement avec Docker Desktop.
 
 ### Limites de Docker Compose vs production réelle
 
@@ -147,11 +147,11 @@ En production réelle, je sauvegarderais : le dépôt GitHub (miroir), les workf
 
 | Élément | Lien |
 |---|---|
-| Dépôt GitHub | https://github.com/DEimazoute/mon-projet |
-| Runs 01-ci.yml | https://github.com/DEimazoute/mon-projet/actions/workflows/01-ci.yml |
-| Runs 02-publish-ghcr.yml | https://github.com/DEimazoute/mon-projet/actions/workflows/02-publish-ghcr.yml |
-| Runs 03-promote.yml | https://github.com/DEimazoute/mon-projet/actions/workflows/03-promote.yml |
-| Image GHCR | https://github.com/DEimazoute/mon-projet/pkgs/container/mon-projet |
+| Dépôt GitHub | https://github.com/Etudiant8/mon-projet |
+| Runs 01-ci.yml | https://github.com/Etudiant8/mon-projet/actions/workflows/01-ci.yml |
+| Runs 02-publish-ghcr.yml | https://github.com/Etudiant8/mon-projet/actions/workflows/02-publish-ghcr.yml |
+| Runs 03-promote.yml | https://github.com/Etudiant8/mon-projet/actions/workflows/03-promote.yml |
+| Image GHCR | https://github.com/Etudiant8/mon-projet/pkgs/container/mon-projet |
 
 ---
 
@@ -159,7 +159,7 @@ En production réelle, je sauvegarderais : le dépôt GitHub (miroir), les workf
 
 ### Difficultés rencontrées
 
-- **Absence de Docker local** : n'ayant pas Docker disponible sur mon poste, j'ai dû m'appuyer entièrement sur GitHub Actions pour les tests et le build. Cela m'a forcé à bien comprendre la structure des workflows et à lire attentivement les logs des runners.
+- **Comprendre le rôle respectif de GitHub Actions et de Docker local** : les traitements principaux (build, test, publication, promotion) devaient rester dans GitHub Actions. Le test local avec Docker Desktop est venu en complément, ce qui m'a demandé de bien comprendre la structure des workflows pour que les deux environnements restent cohérents.
 
 - **Comprendre la différence tag vs digest** : au départ, j'assimilais tag et digest. La documentation m'a permis de comprendre qu'un tag peut être réécrit (mutable) alors que le digest est l'empreinte cryptographique immuable de l'image.
 

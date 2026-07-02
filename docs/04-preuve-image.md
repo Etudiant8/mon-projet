@@ -2,19 +2,19 @@
 
 ## Image publiée
 
-- **Nom de l'image** : `ghcr.io/DEimazoute/mon-projet`
+- **Nom de l'image** : `ghcr.io/Etudiant8/mon-projet`
 - **Tag principal** : `sha-6fe66b3`
 - **Tag secondaire** : `latest`
 - **Tag promotion** : `production-simulee`
 - **Digest** : `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
-- **Lien GHCR** : https://github.com/DEimazoute/mon-projet/pkgs/container/mon-projet
+- **Lien GHCR** : https://github.com/Etudiant8/mon-projet/pkgs/container/mon-projet
 
 ## Comment retrouver le digest
 
 Le digest est affiché dans le résumé du workflow `02-publish-ghcr.yml`, dans la section "Publication GHCR" :
 
 ```
-Image : ghcr.io/DEimazoute/mon-projet
+Image : ghcr.io/Etudiant8/mon-projet
 Tags : sha-abc1234 / latest
 Digest : sha256:abc123...
 ```
@@ -42,7 +42,7 @@ Le digest est l'**empreinte cryptographique immuable** de l'image. Il ne change 
 
 ```bash
 # Revenir à une version précise via son digest
-docker pull ghcr.io/DEimazoute/mon-projet@sha256:abc123...
+docker pull ghcr.io/Etudiant8/mon-projet@sha256:abc123...
 
 # Ou dans le workflow 03-promote.yml, utiliser le tag sha- correspondant :
 # source_tag: sha-abc1234

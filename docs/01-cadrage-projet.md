@@ -2,9 +2,9 @@
 
 ## Identité
 
-- **Nom et prénom** : Anonyme
-- **Email** : anonyme@formation.fr
-- **Dépôt GitHub** : https://github.com/DEimazoute/mon-projet
+- **Nom et prénom** : Etudiant_8
+- **Email** : etudiant8@formation.fr
+- **Dépôt GitHub** : https://github.com/Etudiant8/mon-projet
 - **Date de démarrage** : 27 avril 2026
 
 ## Objectif
@@ -19,7 +19,7 @@ La chaîne doit être automatisée, traçable et reproductible. Chaque étape es
 - Aucune infrastructure fournie, préparée, administrée ou maintenue par le formateur.
 - Pas de serveur distant, pas de SSH, pas de cloud provider imposé.
 - Les traitements principaux sont exécutés dans GitHub Actions.
-- Docker local n'est pas disponible sur mon environnement personnel (voir justification ci-dessous).
+- Docker Desktop est disponible sur mon environnement personnel et a été utilisé pour les tests locaux (voir détail ci-dessous).
 - Pas de VM personnelle disponible (voir justification ci-dessous).
 
 ## Choix personnels
@@ -34,9 +34,9 @@ La chaîne doit être automatisée, traçable et reproductible. Chaque étape es
 - **Tag `production-simulee`** : tag appliqué lors de la promotion, sans rebuild.
 
 ### Environnement local
-Je n'ai pas Docker installé sur mon poste de travail personnel. J'ai donc utilisé exclusivement GitHub Actions comme environnement d'exécution. Les workflows effectuent le build, le test HTTP et la publication directement sur les runners GitHub.
+Docker Desktop est installé sur mon poste de travail personnel. Je l'ai utilisé pour builder et tester l'image (`docker build`, `docker run`, `docker compose up --build`) en complément de l'exécution automatisée dans GitHub Actions, qui reste l'environnement de référence pour la chaîne CI/CD.
 
-**Justification documentée** : l'absence de Docker local ne compromet pas la chaîne CI/CD car GitHub Actions fournit un environnement Ubuntu complet avec Docker préinstallé. Les tests HTTP automatisés dans le workflow `01-ci.yml` remplacent fonctionnellement les tests locaux.
+**Justification documentée** : les traitements principaux (build, test, publication, promotion) restent exécutés dans GitHub Actions, conformément aux contraintes du projet. Le test local avec Docker Desktop est un complément qui permet de vérifier rapidement le comportement de l'image avant de pousser une modification.
 
 ### VM personnelle
 Je ne dispose pas d'une VM personnelle. La chaîne CI/CD est entièrement exécutée dans les GitHub-hosted runners, ce qui est le cas d'usage standard des pipelines DevOps modernes.

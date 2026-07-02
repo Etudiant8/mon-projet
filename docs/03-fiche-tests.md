@@ -3,7 +3,7 @@
 ## Test automatisé GitHub Actions
 
 - **Workflow concerné** : `01-ci.yml`
-- **Lien vers le run réussi** : https://github.com/DEimazoute/mon-projet/actions/workflows/01-ci.yml
+- **Lien vers le run réussi** : https://github.com/Etudiant8/mon-projet/actions/workflows/01-ci.yml
   *(à remplacer par le lien direct vers le run réussi après exécution)*
 - **Ce qui est testé** :
   1. Présence des fichiers obligatoires (`Dockerfile`, `compose.yml`, `site/index.html`, `site/version.json`, `docs/08-compte-rendu-final.md`)

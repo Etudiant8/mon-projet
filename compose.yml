@@ -1,5 +1,5 @@
 # compose.yml — Orchestration légère pour le Projet CI/CD EC06
-# Auteur : Anonyme
+# Auteur : Etudiant_8
 #
 # Ce fichier décrit deux services :
 #   - web    : le serveur Nginx servant le site statique Catal-Log

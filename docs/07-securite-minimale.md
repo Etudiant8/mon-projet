@@ -68,10 +68,10 @@ Le rollback s'appuie sur les **tags** et les **digests** conservés dans GHCR.
 **Méthode 2 — Rollback via digest**
 ```bash
 # Utiliser le digest exact de l'image précédente (immuable)
-docker pull ghcr.io/DEimazoute/mon-projet@sha256:abc123...
-docker tag  ghcr.io/DEimazoute/mon-projet@sha256:abc123... \
-            ghcr.io/DEimazoute/mon-projet:production-simulee
-docker push ghcr.io/DEimazoute/mon-projet:production-simulee
+docker pull ghcr.io/Etudiant8/mon-projet@sha256:abc123...
+docker tag  ghcr.io/Etudiant8/mon-projet@sha256:abc123... \
+            ghcr.io/Etudiant8/mon-projet:production-simulee
+docker push ghcr.io/Etudiant8/mon-projet:production-simulee
 ```
 
 **Avantage du rollback par artefact** : on ne reconstruit pas l'image — on réutilise exactement ce qui a fonctionné avant. Le digest garantit l'intégrité.

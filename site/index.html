@@ -1,283 +1,393 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Catal-Log — Projet CI/CD</title>
-  <style>
-    :root {
-      --blue-dark: #1f4e79;
-      --blue-mid: #2980b9;
-      --blue-light: #e8f4fd;
-      --green: #27ae60;
-      --text: #1f2d3d;
-      --muted: #5d6d7e;
-      --bg: #f0f4f8;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catal-Log — Projet CI/CD</title>
+<meta name="description" content="Chaîne CI/CD Nginx conteneurisée : build, test, publication GHCR, recette et promotion simulée.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
 
-    header {
-      background: var(--blue-dark);
-      color: white;
-      padding: 0;
-    }
-    .header-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 28px 32px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .logo {
-      width: 54px;
-      height: 54px;
-      background: white;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      flex-shrink: 0;
-    }
-    .header-text h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-    .header-text p {
-      font-size: 0.88rem;
-      opacity: 0.8;
-      margin-top: 3px;
-    }
+  :root {
+    --white: #ffffff;
+    --gray-50: #f7f7f8;
+    --gray-100: #eeeeef;
+    --gray-200: #e2e2e4;
+    --gray-400: #9a9aa0;
+    --gray-600: #5c5c63;
+    --gray-900: #1c1c1f;
+  }
 
-    .status-bar {
-      background: var(--blue-mid);
-      padding: 10px 0;
-    }
-    .status-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 32px;
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      color: white;
-      font-weight: 500;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #2ecc71;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+  * { box-sizing: border-box; }
 
-    main {
-      max-width: 960px;
-      margin: 32px auto;
-      padding: 0 32px;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 24px;
-    }
-    @media (max-width: 700px) { main { grid-template-columns: 1fr; } }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.07);
-    }
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--blue-dark);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--blue-light);
-    }
+  h1, h2, h3 { font-family: 'Poppins', 'Open Sans', sans-serif; }
+  code { font-family: 'Open Sans', sans-serif; }
 
-    .pipeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .pipe-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 12px 0;
-      position: relative;
-    }
-    .pipe-step:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 17px;
-      top: 38px;
-      width: 2px;
-      height: calc(100% - 26px);
-      background: var(--blue-light);
-    }
-    .pipe-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--blue-light);
-      border: 2px solid var(--blue-mid);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-    }
-    .pipe-icon.done { background: #eafaf1; border-color: var(--green); }
-    .pipe-content strong { font-size: 0.85rem; color: var(--text); display: block; }
-    .pipe-content span { font-size: 0.75rem; color: var(--muted); }
+  a { color: var(--gray-900); }
+  a:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--gray-900);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
 
-    .info-grid { display: flex; flex-direction: column; gap: 12px; }
-    .info-row { display: flex; flex-direction: column; gap: 2px; }
-    .info-row label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; }
-    .info-row value { font-size: 0.85rem; color: var(--text); font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; background: var(--blue-light); padding: 4px 8px; border-radius: 5px; display: block; word-break: break-all; }
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 10px 16px;
+    z-index: 100;
+    border-radius: 0 0 8px 0;
+    font-weight: 600;
+  }
+  .skip-link:focus { left: 0; }
 
-    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
-    .badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-    .badge.blue { background: var(--blue-light); color: var(--blue-dark); }
-    .badge.green { background: #eafaf1; color: #1e7e34; }
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--gray-900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo svg { width: 20px; height: 20px; stroke: var(--white); }
+  .header-inner span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .header-status {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 13px;
+    background: var(--gray-100);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+  .header-status .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gray-900);
+  }
 
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-  </style>
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 56px 24px 48px;
+  }
+
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    margin: 0 0 14px;
+    letter-spacing: -0.02em;
+    color: var(--gray-900);
+  }
+  .hero p {
+    color: var(--gray-600);
+    max-width: 56ch;
+    margin: 0 auto;
+    font-size: 1.05rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .card h3 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-600);
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h3 svg { width: 16px; height: 16px; stroke: var(--gray-600); }
+
+  /* Pipeline */
+  .pipeline { display: flex; flex-direction: column; }
+  .pipe-step {
+    display: flex;
+    gap: 14px;
+    padding: 0 0 22px;
+    position: relative;
+  }
+  .pipe-step:last-child { padding-bottom: 0; }
+  .pipe-step::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 34px;
+    bottom: 0;
+    width: 2px;
+    background: var(--gray-200);
+  }
+  .pipe-step:last-child::before { display: none; }
+
+  .pipe-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .pipe-icon svg { width: 17px; height: 17px; stroke: var(--gray-900); }
+
+  .pipe-content { padding-top: 5px; }
+  .pipe-content strong {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 3px;
+  }
+  .pipe-content span {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+  .pipe-content code {
+    background: var(--gray-100);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--gray-900);
+  }
+
+  /* Info rows */
+  .info-grid { display: flex; flex-direction: column; gap: 14px; }
+  .info-row { display: flex; flex-direction: column; gap: 4px; }
+  .info-row label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    font-weight: 600;
+  }
+  .info-row .value {
+    font-size: 0.85rem;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    padding: 7px 10px;
+    border-radius: 7px;
+    word-break: break-word;
+  }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 7px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+
+  footer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 24px 40px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gray-400);
+    border-top: 1px solid var(--gray-200);
+  }
+  footer a { color: var(--gray-600); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">📦</div>
-      <div class="header-text">
-        <h1>Catal-Log — Site Statique</h1>
-        <p>Servi par Nginx · Conteneurisé · Déployé via GitHub Actions</p>
-      </div>
-    </div>
-  </header>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 
-  <div class="status-bar">
-    <div class="status-inner">
-      <div class="status-pill"><div class="status-dot"></div> Nginx opérationnel</div>
-      <div class="status-pill"><div class="status-dot"></div> Image publiée sur GHCR</div>
-      <div class="status-pill"><div class="status-dot"></div> Pipeline CI/CD actif</div>
+<header>
+  <div class="header-inner">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+        <line x1="12" y1="22.08" x2="12" y2="12"/>
+      </svg>
+    </div>
+    <span>Catal-Log</span>
+    <div class="header-status">
+      <span class="dot" aria-hidden="true"></span>
+      Pipeline actif
     </div>
   </div>
+</header>
 
-  <main>
+<main id="contenu">
+
+  <div class="hero">
+    <h1>Livraison automatisée d'un site Nginx via GitHub Actions</h1>
+    <p>Cette page est servie par Nginx dans une image Docker construite, testée, publiée sur GHCR et promue automatiquement, sans reconstruction, jusqu'à un environnement de production simulée.</p>
+  </div>
+
+  <div class="grid">
+
     <div class="card">
-      <h2>🔄 Chaîne CI/CD</h2>
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        Chaîne CI/CD
+      </h3>
       <div class="pipeline">
         <div class="pipe-step">
-          <div class="pipe-icon done">📝</div>
+          <div class="pipe-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l-7-7 7-7M5 12h15"/></svg>
+          </div>
           <div class="pipe-content">
-            <strong>Commit &amp; Push vers GitHub</strong>
-            <span>Versionnement du code source et déclenchement automatique</span>
+            <strong>Commit &amp; push vers GitHub</strong>
+            <span>Versionnement du code source, déclenchement automatique des workflows.</span>
           </div>
         </div>
         <div class="pipe-step">
-          <div class="pipe-icon done">🔨</div>
+          <div class="pipe-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          </div>
           <div class="pipe-content">
-            <strong>01-ci.yml — Build &amp; Test HTTP</strong>
-            <span>Construction de l'image Docker + test HTTP automatisé sur port 8080</span>
+            <strong><code>01-ci.yml</code> — Build &amp; test HTTP</strong>
+            <span>Construction de l'image Docker et test HTTP automatisé sur le port 8080.</span>
           </div>
         </div>
         <div class="pipe-step">
-          <div class="pipe-icon done">📦</div>
+          <div class="pipe-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16V8z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
           <div class="pipe-content">
-            <strong>02-publish-ghcr.yml — Publication GHCR</strong>
-            <span>Image taguée (sha- + latest) et publiée dans GitHub Container Registry</span>
+            <strong><code>02-publish-ghcr.yml</code> — Publication GHCR</strong>
+            <span>Image taguée (<code>sha-</code> + <code>latest</code>) et publiée dans GitHub Container Registry.</span>
           </div>
         </div>
         <div class="pipe-step">
-          <div class="pipe-icon done">🧪</div>
+          <div class="pipe-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
           <div class="pipe-content">
-            <strong>03-promote.yml — Validation recette</strong>
-            <span>Test de l'image existante dans l'environnement GitHub "recette"</span>
+            <strong><code>03-promote.yml</code> — Validation recette</strong>
+            <span>Test de l'image existante dans l'environnement GitHub « recette », sans rebuild.</span>
           </div>
         </div>
         <div class="pipe-step">
-          <div class="pipe-icon done">🚀</div>
+          <div class="pipe-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
           <div class="pipe-content">
-            <strong>Promotion production-simulee</strong>
-            <span>Promotion manuelle (workflow_dispatch) sans rebuild — même artefact</span>
+            <strong>Promotion production-simulée</strong>
+            <span>Promotion manuelle (<code>workflow_dispatch</code>) du même artefact — aucune reconstruction.</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div>
-      <div class="card" style="margin-bottom: 24px;">
-        <h2>👤 Projet</h2>
+    <div class="stack">
+      <div class="card">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 10-16 0"/></svg>
+          Projet
+        </h3>
         <div class="info-grid">
           <div class="info-row">
             <label>Auteur</label>
-            <value>Anonyme</value>
+            <div class="value">Etudiant_8</div>
           </div>
           <div class="info-row">
             <label>Évaluation</label>
-            <value>EC06 — ASRC</value>
+            <div class="value">EC06 — ASRC</div>
           </div>
           <div class="info-row">
             <label>Version</label>
-            <value>1.0.0</value>
+            <div class="value">1.0.0</div>
           </div>
           <div class="info-row">
             <label>Date</label>
-            <value>2026-04-27</value>
+            <div class="value">2026-04-27</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h2>🛠️ Stack technique</h2>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Stack technique
+        </h3>
         <div class="badge-row">
-          <span class="badge blue">Docker</span>
-          <span class="badge blue">Nginx 1.27</span>
-          <span class="badge blue">GitHub Actions</span>
-          <span class="badge green">GHCR</span>
-          <span class="badge green">Docker Compose</span>
-          <span class="badge blue">Alpine Linux</span>
+          <span class="badge">Docker</span>
+          <span class="badge">Nginx 1.27</span>
+          <span class="badge">GitHub Actions</span>
+          <span class="badge">GHCR</span>
+          <span class="badge">Docker Compose</span>
+          <span class="badge">Alpine Linux</span>
         </div>
       </div>
     </div>
-  </main>
 
-  <footer>
-    Projet CI/CD — EC06 ASRC · Anonyme · 2026
-  </footer>
+  </div>
+</main>
+
+<footer>
+  Projet CI/CD — EC06 ASRC · Etudiant_8 · 2026 ·
+  <a href="version.json">version.json</a>
+</footer>
 
 </body>
 </html>
