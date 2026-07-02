@@ -3,11 +3,12 @@
 ## Image publiée
 
 - **Nom de l'image** : `ghcr.io/Etudiant8/mon-projet`
-- **Tag principal** : `sha-6fe66b3`
+- **Tag principal** : `sha-35d0a9a`
 - **Tag secondaire** : `latest`
 - **Tag promotion** : `production-simulee`
-- **Digest** : `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
+- **Digest** : `sha256:054d4ca9f730eb115a9f5b21d1a83ce1a03fd83f12b985e8514e80b1b17f6c27`
 - **Lien GHCR** : https://github.com/Etudiant8/mon-projet/pkgs/container/mon-projet
+- **Lien run de publication** : https://github.com/Etudiant8/mon-projet/actions/runs/28566975994
 
 ## Comment retrouver le digest
 

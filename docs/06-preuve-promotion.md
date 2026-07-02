@@ -4,10 +4,9 @@
 
 - **Workflow concerné** : `03-promote.yml`
 - **Environnement GitHub** : `production-simulee`
-- **Tag source** : `latest` *(ou `sha-XXXXXXX` — à remplacer après exécution)*
+- **Tag source** : `latest` (commit `sha-35d0a9a`)
 - **Tag cible** : `production-simulee`
-- **Lien du run** : https://github.com/Etudiant8/mon-projet/actions/workflows/03-promote.yml
-  *(à remplacer par le lien direct vers le run réussi)*
+- **Lien du run** : https://github.com/Etudiant8/mon-projet/actions/runs/28567113428
 
 ## Point essentiel : promotion sans rebuild
 
@@ -35,8 +34,8 @@ Le workflow `03-promote.yml` ne contient **aucune étape `docker build`** dans l
 Il effectue uniquement `docker pull` → `docker tag` → `docker push`.
 
 Le digest de l'image `production-simulee` est **identique** au digest de l'image source :
-- Source : `ghcr.io/Etudiant8/mon-projet:latest` → `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
-- Cible  : `ghcr.io/Etudiant8/mon-projet:production-simulee` → `sha256:df86bf7a1397dfaca5dd0849c3b2ef02afefce92524f61106f0df5d60f4182e3`
+- Source : `ghcr.io/Etudiant8/mon-projet:latest` → `sha256:054d4ca9f730eb115a9f5b21d1a83ce1a03fd83f12b985e8514e80b1b17f6c27`
+- Cible  : `ghcr.io/Etudiant8/mon-projet:production-simulee` → `sha256:054d4ca9f730eb115a9f5b21d1a83ce1a03fd83f12b985e8514e80b1b17f6c27`
 
 *(Les deux digests sont identiques car il s'agit du même artefact — uniquement le tag change.)*
 

@@ -3,8 +3,7 @@
 ## Test automatisé GitHub Actions
 
 - **Workflow concerné** : `01-ci.yml`
-- **Lien vers le run réussi** : https://github.com/Etudiant8/mon-projet/actions/workflows/01-ci.yml
-  *(à remplacer par le lien direct vers le run réussi après exécution)*
+- **Lien vers le run réussi** : https://github.com/Etudiant8/mon-projet/actions/runs/28566975989
 - **Ce qui est testé** :
   1. Présence des fichiers obligatoires (`Dockerfile`, `compose.yml`, `site/index.html`, `site/version.json`, `docs/08-compte-rendu-final.md`)
   2. Syntaxe valide du fichier `compose.yml` via `docker compose config`
@@ -12,7 +11,7 @@
   4. Démarrage du conteneur et test HTTP sur `http://127.0.0.1:8080/`
   5. Test HTTP sur `http://127.0.0.1:8080/version.json`
   6. Vérification que la réponse HTML contient bien "Catal-Log"
-- **Résultat** : ✅ Tous les tests passés — run #10 confirmé vert sur GitHub Actions
+- **Résultat** : ✅ Tous les tests passés — run #13 confirmé vert sur GitHub Actions
 
 ### Extrait du job de test (workflow 01-ci.yml)
 
